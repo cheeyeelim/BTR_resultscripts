@@ -5,10 +5,7 @@ library(ggplot2)
 library(gridExtra) #for plotting multiple graphs
 library(reshape2)
 
-#path='~/res1/'
-#path='/home/cyl49/ownCloud/Research_Work/working_directory/boolean_project/res1/'
-path='D:/ownCloud/Research_Work/working_directory/boolean_project/res1/'
-#path='C:/Users/cyl49/ownCloud/Research_Work/working_directory/boolean_project/res1/'
+path='~/res1/'
 setwd(path)
 
 inter_bool = T
@@ -49,7 +46,6 @@ for(file_ind in 1:5)
         tmp_bngraph = empty.graph(colnames(test_data$bn_modamat[[i]][[j]]))
         amat(tmp_bngraph) = test_data$bn_modamat[[i]][[j]]
         tmp_score = score(tmp_bngraph, as.data.frame(test_data$cdata))
-        #tmp_score = score(tmp_bngraph, as.data.frame(bm_cdata))
         names(tmp_score) = test_data$bn_step[[i]][[j]]
         
         bnmod_gnw_bnscore = c(bnmod_gnw_bnscore, tmp_score)
@@ -76,9 +72,7 @@ for(file_ind in 1:5)
       tmp_bmmodel = test_data$bm_modmodel[[i]][[j]]
       overlap_gene = unname(colnames(test_data$cdata))
       tmp_bmmodel@target = overlap_gene
-      #tmp_score = calc_mscore(bmodel=tmp_bmmodel, istate=test_data$istate, fcdata=bm_cdata, overlap_gene=overlap_gene, max_varperrule=max_varperrule, steady_bool=F, distance_only=F)
       tmp_score = calc_mscore(bmodel=tmp_bmmodel, istate=test_data$istate, fcdata=fcdata, overlap_gene=overlap_gene, max_varperrule=max_varperrule, detail=T)
-      #tmp_score = calc_mscore(bmodel=tmp_bmmodel, istate=test_data$istate, fcdata=fddata, overlap_gene=overlap_gene, max_varperrule=max_varperrule, steady_bool=F, distance_only=F)
       
       names(tmp_score) = rep(j, length(tmp_score))
       
@@ -159,22 +153,6 @@ colnames(bmscore_mid_df) = c('steps', 'score', 'network', 'low', 'high')
 #Make plot objects of scoring functions.
 if(acyclic)
 {
-  p1_bn_box = ggplot(bnscore_df, aes(x=factor(bnscore_df[,'steps']), y=bnscore_df[,'score'])) +
-    geom_boxplot() + xlab('Number of different edges') + ylab('Scores') + ggtitle('BIC scoring function') +
-    scale_x_discrete(labels=unique(bnscore_df[,'steps'])) +
-    facet_wrap(~network, scales='free_y', ncol=1) + 
-    theme(text = element_text(size=20), axis.text.x = element_text(size=10))
-  
-  p2_bm_box = ggplot(bmscore_df, aes(x=factor(bmscore_df[,'steps']), y=bmscore_df[,'score'])) +
-    geom_boxplot() + xlab('Number of different edges') + ylab('Scores') + ggtitle('BSS scoring function') +
-    scale_x_discrete(labels=unique(bmscore_df[,'steps'])) +
-    facet_wrap(~network, scales='free_y', ncol=1) + 
-    theme(text = element_text(size=20), axis.text.x = element_text(size=10))
-  
-  png(paste('boolbaye', ifelse(acyclic, '_acyclic', '_cyclic'), ifelse(nonoise, '_nonoise', ''), '_boxplot_compare_score.png', sep=''), width=3000, height=5000, res=300)
-  grid.arrange(p1_bn_box, p2_bm_box, ncol=2)
-  dev.off()
-  
   p1_bn_mid = ggplot(bnscore_mid_df, aes(x=bnscore_mid_df[, 'steps'], y=bnscore_mid_df[,'score'])) +
     geom_errorbar(aes(ymin=bnscore_mid_df[, 'low'], ymax=bnscore_mid_df[, 'high'])) +
     geom_line() + xlab('Number of different edges') + ylab('Scores') + ggtitle('BIC scoring function') +
@@ -192,16 +170,6 @@ if(acyclic)
   dev.off()
 } else
 {
-  p2_bm_box = ggplot(bmscore_df, aes(x=factor(bmscore_df[,'steps']), y=bmscore_df[,'score'])) +
-    geom_boxplot() + xlab('Number of different edges') + ylab('Scores') + ggtitle('BSS scoring function') +
-    scale_x_discrete(labels=unique(bmscore_df[,'steps'])) +
-    facet_wrap(~network, scales='free_y', ncol=1) + 
-    theme(text = element_text(size=20), axis.text.x = element_text(size=10))
-  
-  png(paste('boolbaye', ifelse(acyclic, '_acyclic', '_cyclic'), ifelse(nonoise, '_nonoise', ''), '_boxplot_compare_score.png', sep=''), width=3000, height=5000, res=300)
-  grid.arrange(p2_bm_box, ncol=2)
-  dev.off()
-  
   p2_bm_mid = ggplot(bmscore_mid_df, aes(x=bmscore_mid_df[, 'steps'], y=bmscore_mid_df[,'score'])) +
     geom_errorbar(aes(ymin=bmscore_mid_df[, 'low'], ymax=bmscore_mid_df[, 'high'])) +
     geom_line() + xlab('Number of different edges') + ylab('Scores') + ggtitle('BSS scoring function') +

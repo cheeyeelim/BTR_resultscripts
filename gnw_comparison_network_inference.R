@@ -12,9 +12,7 @@ acyclic = 'cyclic' #acyclic, cyclic, both
 
 # sect_1 ------------------------------------------------------------------
 
-#path='~/res1/'
-path='/home/cyl49/ownCloud/Research_Work/working_directory/boolean_project/res1/'
-#path='D:/ownCloud/Research_Work/working_directory/boolean_project/res1/'
+path='~/res1/'
 setwd(path)
 
 if(acyclic=='acyclic')

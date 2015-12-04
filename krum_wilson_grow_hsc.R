@@ -2,9 +2,7 @@
 library(BoolTraineR)
 library(doParallel)
 
-#path='~/bool_final/'
-#path='/home/cyl49/ownCloud/Research_Work/working_directory/boolean_project/res2/'
-path='D:/ownCloud/Research_Work/working_directory/boolean_project/res2/'
+path='~/bool_final/'
 setwd(path)
 
 #Setting up for parallel processing.
