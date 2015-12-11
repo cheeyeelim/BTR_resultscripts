@@ -1,4 +1,4 @@
-library(BoolTraineR)
+library(BTR)
 library(ggplot2)
 library(gridExtra) #for plotting multiple graphs
 library(colorspace)

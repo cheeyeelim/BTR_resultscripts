@@ -1,5 +1,5 @@
 #(1) Setup paths and environment.
-library(BoolTraineR)
+library(BTR)
 library(bnlearn)
 library(ggplot2)
 library(gridExtra) #for plotting multiple graphs

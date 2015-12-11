@@ -1,5 +1,5 @@
 #(1) Setup paths and environment.
-library(BoolTraineR)
+library(BTR)
 library(doParallel)
 
 path='~/bool_final/'
