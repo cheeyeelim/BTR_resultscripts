@@ -27,7 +27,7 @@ fcdata = cdata[grepl('hsc', rownames(cdata)),] #select only HSC cells.
 fddata = ddata[grepl('hsc', rownames(ddata)),]
 
 #(3)Filtering expression data.
-result = model_train(cdata=fcdata, ddata=fddata, bmodel=bmodel, istate=istate, preprocess=F, verbose=T)
+result = model_train(cdata=fcdata, ddata=fddata, bmodel=bmodel, istate=istate, verbose=T)
 
 filename = 'bon_wilson_rnaseq_HSC_trained_bmodel.rda'
 save(result, file=filename)

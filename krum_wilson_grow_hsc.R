@@ -38,7 +38,7 @@ tmp_istate = matrix(round(tmp_istate), nrow=1, dimnames=list(1, names(tmp_istate
 grown_istate = cbind(istate, tmp_istate)
 grown_istate = initialise_data(grown_istate)
 
-result = model_train(cdata=fcdata, ddata=fddata, bmodel=grown_bmodel, istate=grown_istate, preprocess=F, verbose=T)
+result = model_train(cdata=fcdata, ddata=fddata, bmodel=grown_bmodel, istate=grown_istate, verbose=T)
 
 filename = 'krum_wilson_myeloid_grow_trained_bmodel.rda'
 save(result, file=filename)
