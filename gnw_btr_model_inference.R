@@ -2,21 +2,24 @@
 library(BTR)
 library(doParallel)
 
-path='~/bool_final/'
+path='~/btr_output/'
 setwd(path)
 
 inter_bool = T
 max_varperrule = 6
 acyclic = T
-initial_model = T
+initial_model = F
+single_cell = F
 
 #Setting up for parallel processing.
-registerDoParallel(cores=4) #this automatically calls mclapply() when no cl is given.
+num_cores = 4
+registerDoParallel(cores=num_cores) #this automatically calls mclapply() when no cl is given.
 
 #Setting random seed for reproducibility.
 set.seed(1)
 
 test_result = c()
+#file_ind = 1
 for(file_ind in 1:5)
 {
   #Load data.
@@ -27,11 +30,23 @@ for(file_ind in 1:5)
   if(initial_model)
   {
     ind_i = sample(seq(1,length(test_data$bm_modmodel)), 1)
-    ind_j = 10
-    result = model_train(cdata=test_data$cdata, ddata=test_data$ddata, bmodel=test_data$bm_modmodel[[ind_i]][[ind_j]], istate=test_data$istate, and_bool=inter_bool, verbose=T, self_loop=F) #Very time consuming
+    ind_j = 5
+    if(single_cell)
+    {
+      result = model_train(cdata=test_data$sc_cdata, bmodel=test_data$bm_modmodel[[ind_i]][[ind_j]], istate=test_data$istate, and_bool=inter_bool, verbose=T, self_loop=F)
+    } else
+    {
+      result = model_train(cdata=test_data$cdata, bmodel=test_data$bm_modmodel[[ind_i]][[ind_j]], istate=test_data$istate, and_bool=inter_bool, verbose=T, self_loop=F)
+    }
   } else
   {
-    result = model_train(cdata=test_data$cdata, ddata=test_data$ddata, istate=test_data$istate, and_bool=inter_bool, verbose=T, self_loop=F) #Very time consuming
+    if(single_cell)
+    {
+      result = model_train(cdata=test_data$sc_cdata, istate=test_data$istate, and_bool=inter_bool, verbose=T, self_loop=F)
+    } else
+    {
+      result = model_train(cdata=test_data$cdata, istate=test_data$istate, and_bool=inter_bool, verbose=T, self_loop=F)
+    }
   }
   adj_mat = abs(bm_to_amat(result))
   end_time = proc.time()
@@ -48,7 +63,7 @@ for(file_ind in 1:5)
 }
 
 #Open file connection for writing output.
-file_name = paste('result_btr-', ifelse(initial_model, 'wi', 'wo'), '_train_', ifelse(acyclic, 'acyclic', 'cyclic'), '_yeast.rda', sep='')
+file_name = paste('result_btr-', ifelse(initial_model, 'wi', 'wo'), '_train_', ifelse(acyclic, 'acyclic_', 'cyclic_'), ifelse(single_cell, 'sc', 'nonsc'), '_yeast1.rda', sep='')
 save(test_result, file=file_name)
 
 #Cleaning up.

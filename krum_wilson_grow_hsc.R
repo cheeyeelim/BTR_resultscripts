@@ -2,7 +2,7 @@
 library(BTR)
 library(doParallel)
 
-path='~/bool_final/'
+path='~/btr_output/'
 setwd(path)
 
 #Setting up for parallel processing.
@@ -20,12 +20,9 @@ bmodel = initialise_model(krum_bmodel)
 istate = initialise_data(krum_istate)
 
 #(3)Filtering expression data.
-tmp_data = initialise_raw_data(wilson_raw_data, max_expr = 'low') #do not filter data at this stage. keep the whole matrix.
-cdata = tmp_data[[1]] #continuous data
-ddata = tmp_data[[2]] #discretised data
+cdata = initialise_raw_data(wilson_raw_data, max_expr = 'low') #do not filter data at this stage. keep the whole matrix.
 cell_ind = grepl('cmp', rownames(cdata)) | grepl('gmp', rownames(cdata)) | grepl('mep', rownames(cdata))
 fcdata = cdata[cell_ind,] #select only relevant cells.
-fddata = ddata[cell_ind,]
 
 #(4)Adding extra genes into the model.
 extra_genes = setdiff(colnames(wilson_raw_data), bmodel@target)
@@ -38,7 +35,7 @@ tmp_istate = matrix(round(tmp_istate), nrow=1, dimnames=list(1, names(tmp_istate
 grown_istate = cbind(istate, tmp_istate)
 grown_istate = initialise_data(grown_istate)
 
-result = model_train(cdata=fcdata, ddata=fddata, bmodel=grown_bmodel, istate=grown_istate, verbose=T)
+result = model_train(cdata=fcdata, bmodel=grown_bmodel, istate=grown_istate, verbose=T)
 
 filename = 'krum_wilson_myeloid_grow_trained_bmodel.rda'
 save(result, file=filename)
