@@ -13,9 +13,6 @@ data(krum_bmodel)
 data(krum_istate)
 data(wilson_raw_data)
 
-inter_bool = T
-max_varperrule = 6
-
 bmodel = initialise_model(krum_bmodel)
 istate = initialise_data(krum_istate)
 

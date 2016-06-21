@@ -13,9 +13,6 @@ data(bon_bmodel)
 data(bon_istate)
 data(wilson_raw_rnaseq)
 
-inter_bool = T
-max_varperrule = 6
-
 bmodel = initialise_model(bon_bmodel)
 istate = initialise_data(bon_istate)
 
